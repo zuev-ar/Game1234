@@ -1,50 +1,33 @@
 # 1·2·3·4
 
-A fast-paced mental math game for iOS. Solve quick addition and subtraction problems where the answer is always **1, 2, 3, or 4** — race the timer, build your streak, and beat your personal best.
+A fast-paced mental math game for iOS. Pick the correct answer out of four options as fast as you can — race the timer, build your streak, and beat your personal best.
 
 ---
 
 ## Gameplay
 
-Each round shows a simple expression like `7 − 4` or `3 + 1`. Tap the correct answer from four buttons before the timer runs out. Every correct answer extends your streak; one mistake — or one timeout — ends the run. The timer shrinks as your streak grows, so the longer you survive, the faster you have to think.
+Each round shows a simple expression like `8 ÷ 2` or `2 + 27`. Four buttons offer four possible answers — tap the right one before the timer runs out. Every correct answer extends your streak; one mistake — or one timeout — ends the run. The timer shrinks as your streak grows, so the longer you survive, the faster you have to think.
 
-- **Answers are always 1–4** — easy to learn, hard to keep up with at speed.
+- **Four options, one right** — read the problem, not the button positions; the answers are shuffled every round.
+- **Difficulty levels** — Easy (add & subtract), Medium (+ division), Hard (+ multiplication). Harder levels give a little more time per answer.
 - **Streak-based scoring** — chase consecutive correct answers.
-- **Personal best** — your record is saved locally between sessions.
-- **Escalating difficulty** — the per-answer time limit decreases as your streak climbs.
-- **Tactile feedback** — haptics on correct/incorrect answers and a confetti celebration on a new record.
-
-## Screenshots
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/f8d2a3c6-b3b4-43ea-aefd-149015c00707" width="250">
-  <img src="https://github.com/user-attachments/assets/0e6a1ea5-acac-4952-bb32-74bb01d9dae4" width="250">
-  <img src="https://github.com/user-attachments/assets/d4eb6039-c212-4144-8496-6e188e90a620" width="250">
-</p>
+- **Personal best per level** — your record is saved locally for each difficulty.
+- **Escalating pressure** — the per-answer time limit decreases as your streak climbs.
+- **Sound & haptics** — audio and tactile feedback on answers, with a confetti celebration on a new record. Both can be toggled in Settings.
 
 ## Tech stack
 
 - **SwiftUI** (iOS 16+)
 - **MVVM** architecture with protocol-based dependency injection
 
-## Architecture
+## Design notes
 
-The project separates game logic from UI so the core can be unit-tested in isolation from SwiftUI.
+A few decisions worth calling out:
 
-```
-Game1234/
-├── App/            App entry, navigation routes, design tokens, app metadata
-├── Models/         Problem, Operation, GamePhase
-├── ViewModels/     GameViewModel (timer, streak, scoring), MainMenuViewModel
-├── Services/       ProblemGenerator, ScoreStorage, GameTicker, HapticFeedback
-└── Views/          MainMenu, Game, Result, About + reusable components
-```
-
-A few design decisions worth calling out:
-
-- **Problem generation works "from the answer."** Instead of generating random operands and hoping the result lands in 1–4, the generator picks the answer first, then builds valid operands around it. This guarantees every problem is solvable within range, never produces negative intermediate values, and never repeats the previous problem.
-- **The timer is abstracted behind a protocol** (`GameTicking`). The production implementation uses `Timer.publish`; tests inject a manual ticker that advances time synchronously, so timeout behavior is tested instantly and deterministically — no waiting on real seconds.
-- **Persistence is behind a protocol** (`ScoreStorageProtocol`). The current implementation uses `UserDefaults`; swapping it for SwiftData or a backend wouldn't touch the view models.
-- **Services are injected via initializers**, so every piece of game logic is covered by tests using mocks.
+- **Problem generation works "from the answer."** The generator picks a valid result first, then builds operands around it — guaranteeing every problem is solvable, with no negative intermediate values and exact division. Division and multiplication stay within the times-table range.
+- **Distractors are deliberate.** The three wrong options mix a near value, a plausible "wrong operation" mistake, and a random value, so the correct answer never simply stands out.
+- **The timer is abstracted behind a protocol.** The production implementation uses `Timer.publish`; tests inject a manual ticker that advances time synchronously, so timeout behavior is tested instantly and deterministically.
+- **Persistence and feedback are behind protocols.** Scores, settings, sound, and haptics are all injected, so the view models stay testable and the implementations are easy to swap.
 
 ## Requirements
 
