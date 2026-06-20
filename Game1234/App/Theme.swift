@@ -1,10 +1,3 @@
-//
-//  Theme.swift
-//  Game1234
-//
-//  Created by zuev_ar on 13.06.2026.
-//
-
 import SwiftUI
 
 /// Дизайн-токены проекта.

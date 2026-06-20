@@ -1,10 +1,3 @@
-//
-//  AnswerButton.swift
-//  Game1234
-//
-//  Created by zuev_ar on 13.06.2026.
-//
-
 import SwiftUI
 
 /// Визуальное состояние кнопки ответа.
@@ -14,17 +7,19 @@ enum AnswerState {
     case wrong
 }
 
-/// Кнопка ответа с цифрой. Подсвечивается по результату: зелёным/красным.
+/// Кнопка с вариантом ответа. Подсвечивается по результату: зелёным/красным.
 struct AnswerButton: View {
-    let number: Int
+    let value: Int
     let state: AnswerState
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            Text("\(number)")
+            Text("\(value)")
                 .font(Theme.display(46, weight: .bold))
                 .foregroundStyle(foreground)
+                .minimumScaleFactor(0.5)
+                .lineLimit(1)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(
                     RoundedRectangle(cornerRadius: Theme.Radius.answer)
@@ -39,7 +34,7 @@ struct AnswerButton: View {
                 .animation(.easeOut(duration: 0.12), value: state)
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("Ответ \(number)")
+        .accessibilityLabel("Answer \(value)")
     }
 
     private var background: Color {
@@ -61,9 +56,9 @@ struct AnswerButton: View {
 
 #Preview {
     HStack {
-        AnswerButton(number: 1, state: .idle, action: {})
-        AnswerButton(number: 2, state: .correct, action: {})
-        AnswerButton(number: 3, state: .wrong, action: {})
+        AnswerButton(value: 12, state: .idle, action: {})
+        AnswerButton(value: 4, state: .correct, action: {})
+        AnswerButton(value: 56, state: .wrong, action: {})
     }
     .frame(height: 90)
     .padding()

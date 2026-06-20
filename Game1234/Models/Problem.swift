@@ -1,39 +1,24 @@
-//
-//  Problem.swift
-//  Game1234
-//
-//  Created by zuev_ar on 13.06.2026.
-//
-
 import Foundation
 
-/// Арифметическая операция в примере.
-enum Operation: String, CaseIterable {
-    case addition = "+"
-    case subtraction = "-"
-
-    /// Применяет операцию к операндам.
-    func apply(_ lhs: Int, _ rhs: Int) -> Int {
-        switch self {
-        case .addition:    return lhs + rhs
-        case .subtraction: return lhs - rhs
-        }
-    }
-}
-
-/// Арифметический пример с ответом из множества {1, 2, 3, 4}.
+/// Пример с четырьмя вариантами ответа, один из которых верный.
 struct Problem: Equatable {
     let leftOperand: Int
     let rightOperand: Int
     let operation: Operation
 
-    /// Правильный ответ (1...4). Вычисляется из операндов — не может разойтись с текстом.
-    var answer: Int {
-        operation.apply(leftOperand, rightOperand)
-    }
+    /// Четыре варианта ответа в порядке отображения на кнопках.
+    let options: [Int]
 
-    /// Текст выражения, например "7 - 4".
+    /// Индекс верного варианта в options (0...3).
+    let correctIndex: Int
+
+    /// Текст выражения, например "8 ÷ 2".
     var text: String {
         "\(leftOperand) \(operation.rawValue) \(rightOperand)"
+    }
+
+    /// Верный ответ (значение).
+    var answer: Int {
+        operation.apply(leftOperand, rightOperand)
     }
 }

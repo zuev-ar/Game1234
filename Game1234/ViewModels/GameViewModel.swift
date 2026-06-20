@@ -1,10 +1,3 @@
-//
-//  GameViewModel.swift
-//  Game1234
-//
-//  Created by zuev_ar on 13.06.2026.
-//
-
 import Foundation
 import Combine
 
@@ -15,9 +8,9 @@ final class GameViewModel: ObservableObject {
     // MARK: - Tuning
 
     private enum Config {
-        static let startTimeLimit: Double = 5.0
-        static let minTimeLimit: Double = 2.0
+        /// На сколько уменьшать лимит за каждый порог правильных ответов.
         static let decrementStep: Double = 0.2
+        /// Порог: каждые N правильных ответов лимит уменьшается на decrementStep.
         static let answersPerDecrement: Int = 5
     }
 
@@ -39,6 +32,7 @@ final class GameViewModel: ObservableObject {
     private let generator: ProblemGenerating
     private let storage: ScoreStorageProtocol
     private let ticker: GameTicking
+    private var difficulty: Difficulty = .easy
 
     init(generator: ProblemGenerating = ProblemGenerator(),
          storage: ScoreStorageProtocol = UserDefaultsScoreStorage(),
@@ -50,17 +44,19 @@ final class GameViewModel: ObservableObject {
 
     // MARK: - Intents
 
-    func startGame() {
+    func startGame(difficulty: Difficulty) {
+        self.difficulty = difficulty
         streak = 0
         phase = .playing
         nextRound()
         ticker.start(onTick: { [weak self] in self?.tick() })
     }
 
-    func answerSelected(_ answer: Int) {
+    /// Выбор варианта по индексу кнопки (0...3).
+    func optionSelected(at index: Int) {
         guard phase == .playing, let problem = currentProblem else { return }
 
-        if answer == problem.answer {
+        if index == problem.correctIndex {
             streak += 1
             nextRound()
         } else {
@@ -75,15 +71,15 @@ final class GameViewModel: ObservableObject {
     // MARK: - Private
 
     private func nextRound() {
-        currentProblem = generator.nextProblem()
+        currentProblem = generator.nextProblem(difficulty: difficulty)
         timeLimit = timeLimitForCurrentStreak()
         timeRemaining = timeLimit
     }
 
     private func timeLimitForCurrentStreak() -> Double {
         let steps = streak / Config.answersPerDecrement
-        let limit = Config.startTimeLimit - Double(steps) * Config.decrementStep
-        return max(Config.minTimeLimit, limit)
+        let limit = difficulty.startTimeLimit - Double(steps) * Config.decrementStep
+        return max(difficulty.minTimeLimit, limit)
     }
 
     private func tick() {
@@ -97,7 +93,7 @@ final class GameViewModel: ObservableObject {
 
     private func finishGame() {
         ticker.stop()
-        let isNewRecord = storage.saveStreakIfRecord(streak)
-        phase = .gameOver(streak: streak, isNewRecord: isNewRecord, personalBest: storage.bestStreak)
+        let isNewRecord = storage.saveStreakIfRecord(streak, for: difficulty)
+        phase = .gameOver(streak: streak, isNewRecord: isNewRecord, personalBest: storage.bestStreak(for: difficulty))
     }
 }

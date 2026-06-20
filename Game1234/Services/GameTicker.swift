@@ -1,10 +1,3 @@
-//
-//  GameTicker.swift
-//  Game1234
-//
-//  Created by zuev_ar on 13.06.2026.
-//
-
 import Foundation
 import Combine
 

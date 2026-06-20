@@ -1,16 +1,12 @@
-//
-//  MainMenuViewModel.swift
-//  Game1234
-//
-//  Created by zuev_ar on 13.06.2026.
-//
-
 import Foundation
 
-/// ViewModel главного меню. Держит актуальный рекорд, обновляемый при возврате с игры.
+/// ViewModel главного меню. Хранит выбранный уровень и его рекорд.
 @MainActor
 final class MainMenuViewModel: ObservableObject {
 
+    @Published var difficulty: Difficulty = .easy {
+        didSet { refresh() }
+    }
     @Published private(set) var bestStreak: Int = 0
 
     private let storage: ScoreStorageProtocol
@@ -19,8 +15,8 @@ final class MainMenuViewModel: ObservableObject {
         self.storage = storage
     }
 
-    /// Перечитывает рекорд (например, при появлении экрана).
+    /// Перечитывает рекорд выбранного уровня (например, при появлении экрана).
     func refresh() {
-        bestStreak = storage.bestStreak
+        bestStreak = storage.bestStreak(for: difficulty)
     }
 }

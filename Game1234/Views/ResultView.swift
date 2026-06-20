@@ -1,10 +1,3 @@
-//
-//  ResultView.swift
-//  Game1234
-//
-//  Created by zuev_ar on 13.06.2026.
-//
-
 import SwiftUI
 
 struct ResultView: View {
@@ -12,6 +5,9 @@ struct ResultView: View {
     let streak: Int
     let isNewRecord: Bool
     let personalBest: Int
+    let difficulty: Difficulty
+
+    private let feedback: FeedbackProviding = FeedbackCoordinator()
 
     var body: some View {
         ZStack {
@@ -61,12 +57,15 @@ struct ResultView: View {
             }
         }
         .navigationBarBackButtonHidden(true)
+        .onAppear {
+            if isNewRecord { feedback.record() }
+        }
     }
 
     private var actionButtons: some View {
         VStack(spacing: 12) {
             Button {
-                path = [.game]
+                path = [.game(difficulty)]
             } label: {
                 Text("Play Again")
                     .font(Theme.display(23, weight: .bold))
@@ -99,14 +98,14 @@ struct ResultView: View {
     }
 }
 
-#Preview("New Record") {
+#Preview("Рекорд") {
     NavigationStack {
-        ResultView(path: .constant([]), streak: 14, isNewRecord: true, personalBest: 14)
+        ResultView(path: .constant([]), streak: 14, isNewRecord: true, personalBest: 14, difficulty: .easy)
     }
 }
 
-#Preview("Personal Best") {
+#Preview("Обычный") {
     NavigationStack {
-        ResultView(path: .constant([]), streak: 5, isNewRecord: false, personalBest: 14)
+        ResultView(path: .constant([]), streak: 5, isNewRecord: false, personalBest: 14, difficulty: .easy)
     }
 }

@@ -1,20 +1,14 @@
-//
-//  GameView.swift
-//  Game1234
-//
-//  Created by zuev_ar on 13.06.2026.
-//
-
 import SwiftUI
 
 struct GameView: View {
     @Binding var path: [Route]
+    let difficulty: Difficulty
     @StateObject private var viewModel = GameViewModel()
 
-    private let haptics: HapticFeedbackProviding = HapticFeedback()
+    private let feedback: FeedbackProviding = FeedbackCoordinator()
 
-    /// Нажатая кнопка и её корректность — для подсветки на ~200мс перед сменой примера.
-    @State private var pressed: (number: Int, isCorrect: Bool)?
+    /// Индекс нажатой кнопки (для подсветки на ~200мс перед сменой примера).
+    @State private var pressedIndex: Int?
 
     var body: some View {
         ZStack {
@@ -39,14 +33,14 @@ struct GameView: View {
             .padding(.bottom, 32)
         }
         .navigationBarBackButtonHidden(true)
-        .onAppear { viewModel.startGame() }
+        .onAppear { viewModel.startGame(difficulty: difficulty) }
         .onDisappear { viewModel.stopGame() }
         .onChange(of: viewModel.currentProblem?.text) { _, _ in
-            pressed = nil
+            pressedIndex = nil
         }
         .onChange(of: viewModel.phase) { _, phase in
             if case .gameOver(let streak, let isNewRecord, let personalBest) = phase {
-                path.append(.result(streak: streak, isNewRecord: isNewRecord, personalBest: personalBest))
+                path.append(.result(streak: streak, isNewRecord: isNewRecord, personalBest: personalBest, difficulty: difficulty))
             }
         }
     }
@@ -54,24 +48,17 @@ struct GameView: View {
     // MARK: - Subviews
 
     private var streakChip: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 8) {
+        HStack(alignment: .bottom, spacing: 8) {
             Text("Streak")
-                .font(.system(size: 14, weight: .semibold))
+                .font(.system(size: 16, weight: .semibold))
                 .foregroundStyle(Theme.textSecondary)
             Text("\(viewModel.streak)")
-                .font(Theme.display(22, weight: .bold))
+                .font(Theme.display(20, weight: .bold))
                 .foregroundStyle(Theme.accent)
+                .frame(minWidth: 28, alignment: .leading)
         }
         .padding(.horizontal, 15)
         .padding(.vertical, 8)
-        .background(
-            RoundedRectangle(cornerRadius: Theme.Radius.chip)
-                .fill(Theme.surface)
-                .overlay(
-                    RoundedRectangle(cornerRadius: Theme.Radius.chip)
-                        .strokeBorder(Theme.hairline, lineWidth: 1)
-                )
-        )
     }
 
     private var problemBlock: some View {
@@ -99,9 +86,9 @@ struct GameView: View {
     private var answerGrid: some View {
         LazyVGrid(columns: [GridItem(.flexible(), spacing: 14),
                             GridItem(.flexible(), spacing: 14)], spacing: 14) {
-            ForEach(1...4, id: \.self) { number in
-                AnswerButton(number: number, state: stateFor(number)) {
-                    handleTap(number)
+            ForEach(Array(options.enumerated()), id: \.offset) { index, value in
+                AnswerButton(value: value, state: stateFor(index)) {
+                    handleTap(index)
                 }
                 .frame(height: 96)
             }
@@ -110,29 +97,34 @@ struct GameView: View {
 
     // MARK: - Logic
 
-    private func stateFor(_ number: Int) -> AnswerState {
-        guard let pressed, pressed.number == number else { return .idle }
-        return pressed.isCorrect ? .correct : .wrong
+    private var options: [Int] {
+        viewModel.currentProblem?.options ?? [0, 0, 0, 0]
     }
 
-    private func handleTap(_ number: Int) {
-        guard pressed == nil,
+    private func stateFor(_ index: Int) -> AnswerState {
+        guard let pressedIndex, let problem = viewModel.currentProblem else { return .idle }
+        if index == problem.correctIndex { return .correct }   // верный всегда зелёный после нажатия
+        if index == pressedIndex { return .wrong }             // ошибочно нажатый — красный
+        return .idle
+    }
+
+    private func handleTap(_ index: Int) {
+        guard pressedIndex == nil,
               let problem = viewModel.currentProblem,
               viewModel.phase == .playing else { return }
 
-        let isCorrect = number == problem.answer
-        pressed = (number, isCorrect)
-        isCorrect ? haptics.success() : haptics.error()
+        let isCorrect = index == problem.correctIndex
+        pressedIndex = index
+        isCorrect ? feedback.correct() : feedback.wrong()
 
-        // Подсветка держится ~200мс, затем уходим в VM.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            viewModel.answerSelected(number)
+            viewModel.optionSelected(at: index)
         }
     }
 }
 
 #Preview {
     NavigationStack {
-        GameView(path: .constant([.game]))
+        GameView(path: .constant([.game(.easy)]), difficulty: .easy)
     }
 }

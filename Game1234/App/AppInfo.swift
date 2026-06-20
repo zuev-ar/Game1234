@@ -1,10 +1,3 @@
-//
-//  AppInfo.swift
-//  Game1234
-//
-//  Created by zuev_ar on 14.06.2026.
-//
-
 import Foundation
 
 /// Метаданные приложения. Версия и build читаются из бандла,
@@ -26,8 +19,8 @@ enum AppInfo {
     static let contactEmail = "arkady.zuev@gmail.com"
     static let privacyURL = "https://example.com/privacy"
 
-    static let tagline = "Tap the answer. Beat the clock."
-    static let about = "Solve quick addition and subtraction problems where the answer is always 1, 2, 3 or 4. Race the timer, build your streak, and beat your personal best."
+    static let tagline = "Four options. One is right.\nBeat the clock."
+    static let about = "Pick the correct answer out of four options as fast as you can. Race the timer, build your streak, and beat your personal best. Three difficulty levels add division and multiplication as you progress."
 
     static var copyright: String {
         let year = Calendar.current.component(.year, from: Date())

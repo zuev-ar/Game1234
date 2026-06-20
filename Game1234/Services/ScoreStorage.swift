@@ -1,28 +1,16 @@
-//
-//  ScoreStorage.swift
-//  Game1234
-//
-//  Created by zuev_ar on 13.06.2026.
-//
-
 import Foundation
 
-/// Хранилище игровых результатов.
-/// Протокол позволяет подменить реализацию (UserDefaults → Supabase/SwiftData) без правок ViewModel.
+/// Хранилище игровых результатов (рекорд по уровню сложности).
 protocol ScoreStorageProtocol {
-    /// Лучший стрик за всё время.
-    var bestStreak: Int { get }
-    /// Сохраняет стрик, если он превышает текущий рекорд.
+    /// Лучший стрик на уровне.
+    func bestStreak(for difficulty: Difficulty) -> Int
+    /// Сохраняет стрик, если он превышает текущий рекорд уровня.
     /// - Returns: true, если установлен новый рекорд.
     @discardableResult
-    func saveStreakIfRecord(_ streak: Int) -> Bool
+    func saveStreakIfRecord(_ streak: Int, for difficulty: Difficulty) -> Bool
 }
 
 final class UserDefaultsScoreStorage: ScoreStorageProtocol {
-
-    private enum Keys {
-        static let bestStreak = "game1234.bestStreak"
-    }
 
     private let defaults: UserDefaults
 
@@ -30,14 +18,18 @@ final class UserDefaultsScoreStorage: ScoreStorageProtocol {
         self.defaults = defaults
     }
 
-    var bestStreak: Int {
-        defaults.integer(forKey: Keys.bestStreak)
+    private func key(for difficulty: Difficulty) -> String {
+        "game1234.bestStreak.\(difficulty.rawValue)"
+    }
+
+    func bestStreak(for difficulty: Difficulty) -> Int {
+        defaults.integer(forKey: key(for: difficulty))
     }
 
     @discardableResult
-    func saveStreakIfRecord(_ streak: Int) -> Bool {
-        guard streak > bestStreak else { return false }
-        defaults.set(streak, forKey: Keys.bestStreak)
+    func saveStreakIfRecord(_ streak: Int, for difficulty: Difficulty) -> Bool {
+        guard streak > bestStreak(for: difficulty) else { return false }
+        defaults.set(streak, forKey: key(for: difficulty))
         return true
     }
 }

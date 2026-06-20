@@ -1,10 +1,3 @@
-//
-//  LogoView.swift
-//  Game1234
-//
-//  Created by zuev_ar on 13.06.2026.
-//
-
 import SwiftUI
 
 /// Лого "1·2·3·4": тёмные цифры, оранжевые точки-разделители.

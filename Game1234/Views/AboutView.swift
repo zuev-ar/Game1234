@@ -1,10 +1,3 @@
-//
-//  AboutView.swift
-//  Game1234
-//
-//  Created by zuev_ar on 14.06.2026.
-//
-
 import SwiftUI
 
 struct AboutView: View {
@@ -38,7 +31,7 @@ struct AboutView: View {
 
     private var header: some View {
         VStack(spacing: 14) {
-            LogoView(fontSize: 44)
+            LogoView(fontSize: 66)
             Text("Version \(AppInfo.version) (\(AppInfo.build))")
                 .font(.system(size: 14, weight: .semibold))
                 .foregroundStyle(Theme.textSecondary)
