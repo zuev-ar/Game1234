@@ -15,7 +15,7 @@ struct ModePicker: View {
                 }
             }
         }
-        .frame(height: 78)
+        .frame(height: 60)
     }
 }
 

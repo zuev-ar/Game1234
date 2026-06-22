@@ -100,9 +100,9 @@ enum GameMode: Hashable {
 
         var subtitle: String {
             switch self {
-            case .practice:   return "no timer\nno game over"
-            case .survival:   return "one mistake\ngame over"
-            case .timeAttack: return "Score as much\nas you can"
+            case .practice:   return "relaxed · no limits"
+            case .survival:   return "one mistake · over"
+            case .timeAttack: return "race the clock"
             }
         }
     }

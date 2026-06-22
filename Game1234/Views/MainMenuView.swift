@@ -45,7 +45,7 @@ struct MainMenuView: View {
     private var recordPill: some View {
         HStack(spacing: 12) {
             TrophyIcon(size: 22)
-            Text("Record ·")
+            Text("Record  ·")
                 .font(Theme.display(24, weight: .heavy))
                 .foregroundStyle(Theme.textPrimary)
             Text("\(viewModel.bestScore)")
