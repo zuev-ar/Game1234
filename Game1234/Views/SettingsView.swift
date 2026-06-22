@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @Binding var path: [Route]
     @StateObject private var viewModel = SettingsViewModel()
 
     var body: some View {
@@ -18,13 +19,32 @@ struct SettingsView: View {
                     systemImage: "iphone.radiowaves.left.and.right",
                     isOn: $viewModel.hapticsEnabled
                 )
+                toggleRow(
+                    title: "Countdown before start",
+                    systemImage: "timer",
+                    isOn: $viewModel.countdownEnabled
+                )
                 Spacer()
+                aboutLink
+                    .padding(.bottom, 24)
             }
             .padding(.horizontal, 24)
             .padding(.top, 24)
         }
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private var aboutLink: some View {
+        Button {
+            path.append(.about)
+        } label: {
+            Text("About")
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(Theme.textSecondary)
+                .underline()
+        }
+        .buttonStyle(.plain)
     }
 
     private func toggleRow(title: String, systemImage: String, isOn: Binding<Bool>) -> some View {
@@ -56,6 +76,6 @@ struct SettingsView: View {
 
 #Preview {
     NavigationStack {
-        SettingsView()
+        SettingsView(path: .constant([]))
     }
 }

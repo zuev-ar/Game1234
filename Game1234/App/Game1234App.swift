@@ -26,7 +26,7 @@ struct RootView: View {
                     case .about:
                         AboutView()
                     case .settings:
-                        SettingsView()
+                        SettingsView(path: $path)
                     }
                 }
         }

@@ -36,30 +36,9 @@ struct MainMenuView: View {
             .padding(.horizontal, 28)
             .padding(.top, 50)
             .padding(.bottom, 34)
-
-            aboutButton
         }
         .navigationBarHidden(true)
         .onAppear { viewModel.refresh() }
-    }
-
-    private var aboutButton: some View {
-        VStack {
-            HStack {
-                Spacer()
-                Button {
-                    path.append(.about)
-                } label: {
-                    Image(systemName: "info.circle.fill")
-                        .font(.system(size: 22, weight: .semibold))
-                        .foregroundStyle(Theme.textSecondary)
-                }
-                .buttonStyle(.plain)
-            }
-            Spacer()
-        }
-        .padding(.horizontal, 28)
-        .padding(.top, 16)
     }
 
     private var recordPill: some View {

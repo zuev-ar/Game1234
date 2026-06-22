@@ -10,6 +10,9 @@ final class SettingsViewModel: ObservableObject {
     @Published var hapticsEnabled: Bool {
         didSet { settings.hapticsEnabled = hapticsEnabled }
     }
+    @Published var countdownEnabled: Bool {
+        didSet { settings.countdownEnabled = countdownEnabled }
+    }
 
     private let settings: SettingsStorageProtocol
 
@@ -17,5 +20,6 @@ final class SettingsViewModel: ObservableObject {
         self.settings = settings
         self.soundEnabled = settings.soundEnabled
         self.hapticsEnabled = settings.hapticsEnabled
+        self.countdownEnabled = settings.countdownEnabled
     }
 }

@@ -31,7 +31,10 @@ struct GameView: View {
             .padding(.horizontal, 24)
             .padding(.top, 18)
             .padding(.bottom, 32)
+
+            countdownOverlay
         }
+        .animation(.easeOut(duration: 0.1), value: viewModel.countdownValue)
         .navigationBarBackButtonHidden(true)
         .onAppear { viewModel.startGame(difficulty: difficulty) }
         .onDisappear { viewModel.stopGame() }
@@ -46,6 +49,25 @@ struct GameView: View {
     }
 
     // MARK: - Subviews
+
+    @ViewBuilder
+    private var countdownOverlay: some View {
+        if let value = viewModel.countdownValue {
+            ZStack {
+                Theme.background.ignoresSafeArea()
+                Text("\(value)")
+                    .font(Theme.display(180, weight: .bold))
+                    .foregroundStyle(Theme.accent)
+                    .id(value)
+                    .transition(.asymmetric(
+                        insertion: .scale(scale: 0.4).combined(with: .opacity),
+                        removal: .scale(scale: 1.4).combined(with: .opacity)
+                    ))
+                    .animation(.spring(response: 0.35, dampingFraction: 0.7), value: value)
+            }
+            .transition(.opacity)
+        }
+    }
 
     private var streakChip: some View {
         HStack(alignment: .bottom, spacing: 8) {
