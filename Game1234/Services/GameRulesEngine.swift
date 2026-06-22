@@ -40,6 +40,8 @@ extension GameMode {
             return SurvivalEngine(difficulty: difficulty, generator: generator)
         case .timeAttack(let difficulty, let duration):
             return TimeAttackEngine(difficulty: difficulty, duration: duration, generator: generator)
+        case .practice(let difficulty):
+            return PracticeEngine(difficulty: difficulty, generator: generator)
         }
     }
 }

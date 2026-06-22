@@ -17,11 +17,14 @@ enum GameMode: Hashable {
     case survival(Difficulty)
     /// Фиксированное время на партию, ошибка не засчитывается.
     case timeAttack(Difficulty, duration: TimeAttackDuration)
+    /// Тренировочный режим: без таймера, без проигрыша. Для разминки и для детей.
+    case practice(Difficulty)
 
     var difficulty: Difficulty {
         switch self {
         case .survival(let d):         return d
         case .timeAttack(let d, _):    return d
+        case .practice(let d):         return d
         }
     }
 
@@ -29,10 +32,23 @@ enum GameMode: Hashable {
         switch self {
         case .survival:   return .survival
         case .timeAttack: return .timeAttack
+        case .practice:   return .practice
         }
     }
 
     var title: String { kind.title }
+
+    /// Использует ли режим обратный таймер.
+    var usesTimer: Bool {
+        switch self {
+        case .survival, .timeAttack: return true
+        case .practice:              return false
+        }
+    }
+
+    /// Завершается ли режим автоматически (по таймеру/ошибке).
+    /// Practice — единственный режим, который игрок прекращает вручную.
+    var hasAutoFinish: Bool { usesTimer }
 
     /// Уникальный идентификатор для ключей рекордов.
     var storageID: String {
@@ -41,6 +57,8 @@ enum GameMode: Hashable {
             return "survival.\(d.rawValue)"
         case .timeAttack(let d, let dur):
             return "timeAttack.\(d.rawValue).\(dur.rawValue)"
+        case .practice(let d):
+            return "practice.\(d.rawValue)"
         }
     }
 
@@ -49,6 +67,7 @@ enum GameMode: Hashable {
         switch self {
         case .survival:   return "FINAL STREAK"
         case .timeAttack: return "CORRECT ANSWERS"
+        case .practice:   return "PROBLEMS SOLVED"
         }
     }
 
@@ -59,10 +78,13 @@ enum GameMode: Hashable {
             return "Survival · \(d.title)"
         case .timeAttack(let d, let dur):
             return "Time Attack \(dur.title) · \(d.title)"
+        case .practice(let d):
+            return "Practice · \(d.title)"
         }
     }
 
     enum Kind: String, CaseIterable, Hashable, Identifiable {
+        case practice
         case survival
         case timeAttack
 
@@ -70,6 +92,7 @@ enum GameMode: Hashable {
 
         var title: String {
             switch self {
+            case .practice:   return "Practice"
             case .survival:   return "Survival"
             case .timeAttack: return "Time Attack"
             }
@@ -77,8 +100,9 @@ enum GameMode: Hashable {
 
         var subtitle: String {
             switch self {
-            case .survival:   return "One mistake — game over"
-            case .timeAttack: return "Score as much as you can"
+            case .practice:   return "no timer\nno game over"
+            case .survival:   return "one mistake\ngame over"
+            case .timeAttack: return "Score as much\nas you can"
             }
         }
     }

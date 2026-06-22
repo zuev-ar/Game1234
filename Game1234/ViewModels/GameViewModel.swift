@@ -77,13 +77,15 @@ final class GameViewModel: ObservableObject {
     func pause() {
         guard phase == .playing, !isPaused else { return }
         isPaused = true
-        ticker.stop()
+        if mode.usesTimer { ticker.stop() }
     }
 
     func resume() {
         guard phase == .playing, isPaused else { return }
         isPaused = false
-        ticker.start(onTick: { [weak self] in self?.tick() })
+        if mode.usesTimer {
+            ticker.start(onTick: { [weak self] in self?.tick() })
+        }
     }
 
     func stopGame() {
@@ -114,7 +116,9 @@ final class GameViewModel: ObservableObject {
         guard let engine else { return }
         state = engine.initialState()
         phase = .playing
-        ticker.start(onTick: { [weak self] in self?.tick() })
+        if mode.usesTimer {
+            ticker.start(onTick: { [weak self] in self?.tick() })
+        }
     }
 
     private func tick() {

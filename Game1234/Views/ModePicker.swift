@@ -5,15 +5,17 @@ struct ModePicker: View {
     @Binding var selection: GameMode.Kind
 
     var body: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: 8) {
             ForEach(GameMode.Kind.allCases) { kind in
                 ChipButton(title: kind.title,
                            subtitle: kind.subtitle,
-                           selected: selection == kind) {
+                           selected: selection == kind,
+                           compact: true) {
                     selection = kind
                 }
             }
         }
+        .frame(height: 78)
     }
 }
 

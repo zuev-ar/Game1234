@@ -28,6 +28,8 @@ final class MainMenuViewModel: ObservableObject {
             return .survival(settings.difficulty)
         case .timeAttack:
             return .timeAttack(settings.difficulty, duration: settings.timeAttackDuration)
+        case .practice:
+            return .practice(settings.difficulty)
         }
     }
 }

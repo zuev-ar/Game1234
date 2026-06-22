@@ -18,12 +18,13 @@ struct ChipButton: View {
                     Text(subtitle)
                         .font(.system(size: 11, weight: .medium))
                         .opacity(0.85)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.75)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
             .foregroundStyle(selected ? .white : Theme.textSecondary)
-            .frame(maxWidth: .infinity)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             .padding(.vertical, compact ? 10 : 12)
             .background(
                 RoundedRectangle(cornerRadius: Theme.Radius.chip)

@@ -16,7 +16,9 @@ struct GameView: View {
             Theme.background.ignoresSafeArea()
 
             VStack(spacing: 0) {
-                TimerBar(progress: viewModel.timeProgress)
+                if mode.usesTimer {
+                    TimerBar(progress: viewModel.timeProgress)
+                }
 
                 HStack {
                     closeButton
@@ -86,19 +88,19 @@ struct GameView: View {
                     .onTapGesture { showExitConfirmation = false }
 
                 VStack(spacing: 24) {
-                    Text("End game?")
+                    Text(exitTitle)
                         .font(Theme.display(26, weight: .bold))
                         .foregroundStyle(Theme.textPrimary)
                         .multilineTextAlignment(.center)
 
-                    Text("Your current score won't be saved.")
+                    Text(exitSubtitle)
                         .font(Theme.display(15, weight: .medium))
                         .foregroundStyle(Theme.textSecondary)
                         .multilineTextAlignment(.center)
 
                     VStack(spacing: 10) {
                         Button { exitToMenu() } label: {
-                            Text("End game")
+                            Text(exitConfirmTitle)
                                 .font(Theme.display(18, weight: .bold))
                                 .foregroundStyle(.white)
                                 .frame(maxWidth: .infinity)
@@ -169,7 +171,20 @@ struct GameView: View {
         switch mode {
         case .survival:   return "Streak"
         case .timeAttack: return "Score"
+        case .practice:   return "Solved"
         }
+    }
+
+    private var exitTitle: String {
+        mode.usesTimer ? "End game?" : "End practice?"
+    }
+
+    private var exitSubtitle: String {
+        mode.usesTimer ? "Your current score won't be saved." : "Take a break — your progress isn't tracked here."
+    }
+
+    private var exitConfirmTitle: String {
+        mode.usesTimer ? "End game" : "End practice"
     }
 
     private var problemBlock: some View {

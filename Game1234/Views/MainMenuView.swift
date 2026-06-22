@@ -12,8 +12,10 @@ struct MainMenuView: View {
                 Spacer().frame(height: 20)
                 header
                 Spacer()
-                recordPill
-                    .offset(y: -40)
+                if viewModel.selectedMode.hasAutoFinish {
+                    recordPill
+                        .offset(y: -40)
+                }
                 summaryText
                     .padding(.top, 2)
                 Spacer()
@@ -44,10 +46,10 @@ struct MainMenuView: View {
         HStack(spacing: 12) {
             TrophyIcon(size: 22)
             Text("Record ·")
-                .font(.system(size: 22, weight: .bold))
+                .font(Theme.display(24, weight: .heavy))
                 .foregroundStyle(Theme.textPrimary)
             Text("\(viewModel.bestScore)")
-                .font(.system(size: 22, weight: .bold))
+                .font(Theme.display(24, weight: .heavy))
                 .foregroundStyle(Theme.textPrimary)
                 .lineLimit(1)
                 .frame(minWidth: 34, alignment: .leading)

@@ -23,7 +23,7 @@ final class UserDefaultsScoreStorage: ScoreStorageProtocol {
         case .survival(let d):
             // Сохраняем совместимость со старыми рекордами Survival.
             return "game1234.bestStreak.\(d.rawValue)"
-        case .timeAttack:
+        case .timeAttack, .practice:
             return "game1234.bestScore.\(mode.storageID)"
         }
     }
