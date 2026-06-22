@@ -13,8 +13,11 @@ struct MainMenuView: View {
                 header
                 Spacer()
                 recordPill
+                    .offset(y: -40)
+                summaryText
+                    .padding(.top, 2)
                 Spacer()
-                playSection
+                playButton
                 settingsLink.padding(.top, 16)
             }
             .padding(.horizontal, 28)
@@ -54,19 +57,16 @@ struct MainMenuView: View {
         .background(
             Capsule()
                 .fill(Theme.surface)
-                .shadow(color: Color.black.opacity(0.08), radius: 10, x: 0, y: 4)
+                .blur(radius: 10)
         )
     }
 
-    private var playSection: some View {
-        VStack(spacing: 10) {
-            Text(viewModel.selectedMode.summary)
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(Theme.textSecondary)
-                .tracking(0.4)
-                .animation(.easeOut(duration: 0.2), value: viewModel.selectedMode.summary)
-            playButton
-        }
+    private var summaryText: some View {
+        Text(viewModel.selectedMode.summary)
+            .font(.system(size: 14, weight: .semibold))
+            .foregroundStyle(Theme.textSecondary)
+            .tracking(0.4)
+            .animation(.easeOut(duration: 0.2), value: viewModel.selectedMode.summary)
     }
 
     private var playButton: some View {

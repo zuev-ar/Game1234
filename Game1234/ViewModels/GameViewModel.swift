@@ -12,6 +12,7 @@ final class GameViewModel: ObservableObject {
     @Published private(set) var state: GameState?
     /// Значение обратного отсчёта перед стартом (3 → 2 → 1). nil — отсчёт не идёт.
     @Published private(set) var countdownValue: Int?
+    @Published private(set) var isPaused = false
 
     // MARK: - Derived (для View)
 
@@ -73,10 +74,23 @@ final class GameViewModel: ObservableObject {
         process(outcome)
     }
 
+    func pause() {
+        guard phase == .playing, !isPaused else { return }
+        isPaused = true
+        ticker.stop()
+    }
+
+    func resume() {
+        guard phase == .playing, isPaused else { return }
+        isPaused = false
+        ticker.start(onTick: { [weak self] in self?.tick() })
+    }
+
     func stopGame() {
         countdownTask?.cancel()
         countdownTask = nil
         countdownValue = nil
+        isPaused = false
         ticker.stop()
     }
 

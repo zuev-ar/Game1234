@@ -9,6 +9,7 @@ struct GameView: View {
 
     /// Индекс нажатой кнопки (для подсветки на ~200мс перед сменой примера).
     @State private var pressedIndex: Int?
+    @State private var showExitConfirmation = false
 
     var body: some View {
         ZStack {
@@ -18,6 +19,7 @@ struct GameView: View {
                 TimerBar(progress: viewModel.timeProgress)
 
                 HStack {
+                    closeButton
                     Spacer()
                     scoreChip
                 }
@@ -33,7 +35,10 @@ struct GameView: View {
             .padding(.bottom, 32)
 
             countdownOverlay
+            exitConfirmationOverlay
         }
+        .simultaneousGesture(exitGesture)
+        .animation(.spring(response: 0.32, dampingFraction: 0.78), value: showExitConfirmation)
         .animation(.easeOut(duration: 0.35), value: viewModel.countdownValue)
         .navigationBarBackButtonHidden(true)
         .onAppear { viewModel.startGame(mode: mode) }
@@ -45,6 +50,9 @@ struct GameView: View {
             if case .gameOver(let score, let isNewRecord, let personalBest) = phase {
                 path.append(.result(score: score, isNewRecord: isNewRecord, personalBest: personalBest, mode: mode))
             }
+        }
+        .onChange(of: showExitConfirmation) { _, isShown in
+            isShown ? viewModel.pause() : viewModel.resume()
         }
     }
 
@@ -67,6 +75,77 @@ struct GameView: View {
             }
             .transition(.opacity)
         }
+    }
+
+    @ViewBuilder
+    private var exitConfirmationOverlay: some View {
+        if showExitConfirmation {
+            ZStack {
+                Color.black.opacity(0.45)
+                    .ignoresSafeArea()
+                    .onTapGesture { showExitConfirmation = false }
+
+                VStack(spacing: 24) {
+                    Text("End game?")
+                        .font(Theme.display(26, weight: .bold))
+                        .foregroundStyle(Theme.textPrimary)
+                        .multilineTextAlignment(.center)
+
+                    Text("Your current score won't be saved.")
+                        .font(Theme.display(15, weight: .medium))
+                        .foregroundStyle(Theme.textSecondary)
+                        .multilineTextAlignment(.center)
+
+                    VStack(spacing: 10) {
+                        Button { exitToMenu() } label: {
+                            Text("End game")
+                                .font(Theme.display(18, weight: .bold))
+                                .foregroundStyle(.white)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 52)
+                                .background(
+                                    RoundedRectangle(cornerRadius: Theme.Radius.button)
+                                        .fill(Theme.wrong)
+                                )
+                        }
+                        .buttonStyle(.plain)
+
+                        Button { showExitConfirmation = false } label: {
+                            Text("Cancel")
+                                .font(Theme.display(18, weight: .semibold))
+                                .foregroundStyle(Theme.textSecondary)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 52)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding(.horizontal, 24)
+                .padding(.vertical, 28)
+                .frame(maxWidth: 340)
+                .background(
+                    RoundedRectangle(cornerRadius: Theme.Radius.button)
+                        .fill(Theme.surface)
+                        .shadow(color: Color.black.opacity(0.15), radius: 24, x: 0, y: 12)
+                )
+                .padding(.horizontal, 32)
+                .transition(.scale(scale: 0.92).combined(with: .opacity))
+            }
+            .transition(.opacity)
+        }
+    }
+
+    private var closeButton: some View {
+        Button {
+            showExitConfirmation = true
+        } label: {
+            Image(systemName: "xmark")
+                .font(.system(size: 14, weight: .bold))
+                .foregroundStyle(Theme.textSecondary)
+                .frame(width: 34, height: 34)
+                .background(Circle().fill(Theme.surface))
+        }
+        .buttonStyle(.plain)
     }
 
     private var scoreChip: some View {
@@ -125,6 +204,21 @@ struct GameView: View {
     }
 
     // MARK: - Logic
+
+    private var exitGesture: some Gesture {
+        DragGesture(minimumDistance: 80)
+            .onEnded { value in
+                if value.translation.height > 120,
+                   abs(value.translation.width) < 100 {
+                    showExitConfirmation = true
+                }
+            }
+    }
+
+    private func exitToMenu() {
+        viewModel.stopGame()
+        path.removeAll()
+    }
 
     private var options: [Int] {
         viewModel.currentProblem?.options ?? [0, 0, 0, 0]
