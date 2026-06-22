@@ -23,6 +23,14 @@
 		B47E52BC2FE6899300CD375A /* FeedbackCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47E52BB2FE6899100CD375A /* FeedbackCoordinator.swift */; };
 		B47E52BE2FE6899E00CD375A /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47E52BD2FE6899C00CD375A /* SettingsViewModel.swift */; };
 		B47E52C02FE689B400CD375A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47E52BF2FE689B200CD375A /* SettingsView.swift */; };
+		B47E52C22FE98CB000CD375A /* GameMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47E52C12FE98CAE00CD375A /* GameMode.swift */; };
+		B47E52C42FE990E400CD375A /* GameRulesEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47E52C32FE990E200CD375A /* GameRulesEngine.swift */; };
+		B47E52C62FE9929800CD375A /* SurvivalEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47E52C52FE9929700CD375A /* SurvivalEngine.swift */; };
+		B47E52C82FE992AB00CD375A /* TimeAttackEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47E52C72FE992A900CD375A /* TimeAttackEngine.swift */; };
+		B47E52CA2FE9934900CD375A /* ChipButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47E52C92FE9934700CD375A /* ChipButton.swift */; };
+		B47E52CC2FE9937D00CD375A /* ModePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47E52CB2FE9937B00CD375A /* ModePicker.swift */; };
+		B47E52CE2FE993AB00CD375A /* DurationPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47E52CD2FE993A900CD375A /* DurationPicker.swift */; };
+		B47E52D02FE993D300CD375A /* DifficultyPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47E52CF2FE993D200CD375A /* DifficultyPicker.swift */; };
 		B494C1672FDC8E9C00CAA0A9 /* Game1234App.swift in Sources */ = {isa = PBXBuildFile; fileRef = B494C1662FDC8E9C00CAA0A9 /* Game1234App.swift */; };
 		B494C16B2FDC8EA000CAA0A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B494C16A2FDC8EA000CAA0A9 /* Assets.xcassets */; };
 		B494C16E2FDC8EA000CAA0A9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B494C16D2FDC8EA000CAA0A9 /* Preview Assets.xcassets */; };
@@ -61,6 +69,14 @@
 		B47E52BB2FE6899100CD375A /* FeedbackCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackCoordinator.swift; sourceTree = "<group>"; };
 		B47E52BD2FE6899C00CD375A /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		B47E52BF2FE689B200CD375A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		B47E52C12FE98CAE00CD375A /* GameMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameMode.swift; sourceTree = "<group>"; };
+		B47E52C32FE990E200CD375A /* GameRulesEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRulesEngine.swift; sourceTree = "<group>"; };
+		B47E52C52FE9929700CD375A /* SurvivalEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurvivalEngine.swift; sourceTree = "<group>"; };
+		B47E52C72FE992A900CD375A /* TimeAttackEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeAttackEngine.swift; sourceTree = "<group>"; };
+		B47E52C92FE9934700CD375A /* ChipButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipButton.swift; sourceTree = "<group>"; };
+		B47E52CB2FE9937B00CD375A /* ModePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModePicker.swift; sourceTree = "<group>"; };
+		B47E52CD2FE993A900CD375A /* DurationPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationPicker.swift; sourceTree = "<group>"; };
+		B47E52CF2FE993D200CD375A /* DifficultyPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DifficultyPicker.swift; sourceTree = "<group>"; };
 		B494C1632FDC8E9C00CAA0A9 /* Game1234.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Game1234.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B494C1662FDC8E9C00CAA0A9 /* Game1234App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game1234App.swift; sourceTree = "<group>"; };
 		B494C16A2FDC8EA000CAA0A9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -108,12 +124,15 @@
 			isa = PBXGroup;
 			children = (
 				B41D37E72FDDB6A400FF0F2E /* ProblemGenerator.swift */,
-				B41D37E52FDDB5EF00FF0F2E /* ScoreStorage.swift */,
 				B4CEAAEB2FDDC701005B57F4 /* GameTicker.swift */,
+				B47E52C32FE990E200CD375A /* GameRulesEngine.swift */,
 				B4CEAAED2FDDCCBD005B57F4 /* HapticFeedback.swift */,
 				B47E52BB2FE6899100CD375A /* FeedbackCoordinator.swift */,
+				B47E52C72FE992A900CD375A /* TimeAttackEngine.swift */,
+				B41D37E52FDDB5EF00FF0F2E /* ScoreStorage.swift */,
 				B47E52B72FE6897100CD375A /* SoundPlayer.swift */,
 				B47E52B92FE6897F00CD375A /* SettingsStorage.swift */,
+				B47E52C52FE9929700CD375A /* SurvivalEngine.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -124,6 +143,7 @@
 				B41D37EF2FDDB88000FF0F2E /* Problem.swift */,
 				B4B06EC22FE3052700FE9D5C /* Operation.swift */,
 				B4B06EC42FE305A700FE9D5C /* Difficulty.swift */,
+				B47E52C12FE98CAE00CD375A /* GameMode.swift */,
 				B4CEAAE12FDDB8C1005B57F4 /* GamePhase.swift */,
 			);
 			path = Models;
@@ -133,8 +153,10 @@
 			isa = PBXGroup;
 			children = (
 				B4CEAAE52FDDBB07005B57F4 /* MainMenuView.swift */,
+				B47E52CB2FE9937B00CD375A /* ModePicker.swift */,
 				B4CEAAE72FDDBB29005B57F4 /* GameView.swift */,
 				B4CEAAF92FDDE215005B57F4 /* LogoView.swift */,
+				B47E52C92FE9934700CD375A /* ChipButton.swift */,
 				B4CEAAEF2FDDCCF2005B57F4 /* AnswerButton.swift */,
 				B43E53E22FDEDED200A2D846 /* AboutView.swift */,
 				B4CEAAF12FDDCD02005B57F4 /* TimerBar.swift */,
@@ -142,6 +164,8 @@
 				B4CEAAE92FDDBB3E005B57F4 /* ResultView.swift */,
 				B4CEAAF52FDDD0D0005B57F4 /* ConfettiView.swift */,
 				B47E52BF2FE689B200CD375A /* SettingsView.swift */,
+				B47E52CD2FE993A900CD375A /* DurationPicker.swift */,
+				B47E52CF2FE993D200CD375A /* DifficultyPicker.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -286,18 +310,24 @@
 				B43E53E12FDEDE5200A2D846 /* AppInfo.swift in Sources */,
 				B4CEAAF22FDDCD03005B57F4 /* TimerBar.swift in Sources */,
 				B4B06EC52FE305A900FE9D5C /* Difficulty.swift in Sources */,
+				B47E52CA2FE9934900CD375A /* ChipButton.swift in Sources */,
 				B4CEAAEE2FDDCCBF005B57F4 /* HapticFeedback.swift in Sources */,
 				B41D37F02FDDB88300FF0F2E /* Problem.swift in Sources */,
 				B47E52BC2FE6899300CD375A /* FeedbackCoordinator.swift in Sources */,
 				B4CEAAEA2FDDBB40005B57F4 /* ResultView.swift in Sources */,
 				B4CEAAEC2FDDC702005B57F4 /* GameTicker.swift in Sources */,
 				B41D37E82FDDB6A600FF0F2E /* ProblemGenerator.swift in Sources */,
+				B47E52CE2FE993AB00CD375A /* DurationPicker.swift in Sources */,
 				B47E52B82FE6897500CD375A /* SoundPlayer.swift in Sources */,
 				B4CEAAFA2FDDE216005B57F4 /* LogoView.swift in Sources */,
 				B4CEAAE62FDDBB09005B57F4 /* MainMenuView.swift in Sources */,
+				B47E52C82FE992AB00CD375A /* TimeAttackEngine.swift in Sources */,
+				B47E52CC2FE9937D00CD375A /* ModePicker.swift in Sources */,
 				B4B06EC32FE3052900FE9D5C /* Operation.swift in Sources */,
+				B47E52C42FE990E400CD375A /* GameRulesEngine.swift in Sources */,
 				B4CEAAF62FDDD0D1005B57F4 /* ConfettiView.swift in Sources */,
 				B4CEAAF82FDDE00C005B57F4 /* Theme.swift in Sources */,
+				B47E52D02FE993D300CD375A /* DifficultyPicker.swift in Sources */,
 				B4CEAAF42FDDD0A7005B57F4 /* MainMenuViewModel.swift in Sources */,
 				B4CEAAE82FDDBB2A005B57F4 /* GameView.swift in Sources */,
 				B47E52BA2FE6898200CD375A /* SettingsStorage.swift in Sources */,
@@ -306,8 +336,10 @@
 				B41D37E62FDDB61700FF0F2E /* ScoreStorage.swift in Sources */,
 				B4CEAAF02FDDCCF5005B57F4 /* AnswerButton.swift in Sources */,
 				B494C1672FDC8E9C00CAA0A9 /* Game1234App.swift in Sources */,
+				B47E52C62FE9929800CD375A /* SurvivalEngine.swift in Sources */,
 				B43E53DF2FDEC7E900A2D846 /* TrophyIcon.swift in Sources */,
 				B4CEAAE22FDDB8C3005B57F4 /* GamePhase.swift in Sources */,
+				B47E52C22FE98CB000CD375A /* GameMode.swift in Sources */,
 				B47E52BE2FE6899E00CD375A /* SettingsViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

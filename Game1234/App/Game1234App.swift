@@ -19,10 +19,10 @@ struct RootView: View {
             MainMenuView(path: $path)
                 .navigationDestination(for: Route.self) { route in
                     switch route {
-                    case .game(let difficulty):
-                        GameView(path: $path, difficulty: difficulty)
-                    case .result(let streak, let isNewRecord, let personalBest, let difficulty):
-                        ResultView(path: $path, streak: streak, isNewRecord: isNewRecord, personalBest: personalBest, difficulty: difficulty)
+                    case .game(let mode):
+                        GameView(path: $path, mode: mode)
+                    case .result(let score, let isNewRecord, let personalBest, let mode):
+                        ResultView(path: $path, score: score, isNewRecord: isNewRecord, personalBest: personalBest, mode: mode)
                     case .about:
                         AboutView()
                     case .settings:

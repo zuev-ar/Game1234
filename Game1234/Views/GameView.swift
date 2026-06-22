@@ -2,7 +2,7 @@ import SwiftUI
 
 struct GameView: View {
     @Binding var path: [Route]
-    let difficulty: Difficulty
+    let mode: GameMode
     @StateObject private var viewModel = GameViewModel()
 
     private let feedback: FeedbackProviding = FeedbackCoordinator()
@@ -19,7 +19,7 @@ struct GameView: View {
 
                 HStack {
                     Spacer()
-                    streakChip
+                    scoreChip
                 }
                 .padding(.top, 18)
 
@@ -34,16 +34,16 @@ struct GameView: View {
 
             countdownOverlay
         }
-        .animation(.easeOut(duration: 0.1), value: viewModel.countdownValue)
+        .animation(.easeOut(duration: 0.35), value: viewModel.countdownValue)
         .navigationBarBackButtonHidden(true)
-        .onAppear { viewModel.startGame(difficulty: difficulty) }
+        .onAppear { viewModel.startGame(mode: mode) }
         .onDisappear { viewModel.stopGame() }
         .onChange(of: viewModel.currentProblem?.text) { _, _ in
             pressedIndex = nil
         }
         .onChange(of: viewModel.phase) { _, phase in
-            if case .gameOver(let streak, let isNewRecord, let personalBest) = phase {
-                path.append(.result(streak: streak, isNewRecord: isNewRecord, personalBest: personalBest, difficulty: difficulty))
+            if case .gameOver(let score, let isNewRecord, let personalBest) = phase {
+                path.append(.result(score: score, isNewRecord: isNewRecord, personalBest: personalBest, mode: mode))
             }
         }
     }
@@ -69,18 +69,25 @@ struct GameView: View {
         }
     }
 
-    private var streakChip: some View {
+    private var scoreChip: some View {
         HStack(alignment: .bottom, spacing: 8) {
-            Text("Streak")
+            Text(scoreLabel)
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundStyle(Theme.textSecondary)
-            Text("\(viewModel.streak)")
+            Text("\(viewModel.score)")
                 .font(Theme.display(20, weight: .bold))
                 .foregroundStyle(Theme.accent)
                 .frame(minWidth: 28, alignment: .leading)
         }
         .padding(.horizontal, 15)
         .padding(.vertical, 8)
+    }
+
+    private var scoreLabel: String {
+        switch mode {
+        case .survival:   return "Streak"
+        case .timeAttack: return "Score"
+        }
     }
 
     private var problemBlock: some View {
@@ -145,8 +152,15 @@ struct GameView: View {
     }
 }
 
-#Preview {
+#Preview("Survival") {
     NavigationStack {
-        GameView(path: .constant([.game(.easy)]), difficulty: .easy)
+        GameView(path: .constant([.game(.survival(.easy))]), mode: .survival(.easy))
+    }
+}
+
+#Preview("Time Attack") {
+    NavigationStack {
+        GameView(path: .constant([.game(.timeAttack(.easy, duration: .sixty))]),
+                 mode: .timeAttack(.easy, duration: .sixty))
     }
 }

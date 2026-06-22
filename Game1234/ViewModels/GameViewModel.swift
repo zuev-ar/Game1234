@@ -1,33 +1,31 @@
 import Foundation
 import Combine
 
-/// ViewModel игрового экрана. Вся игровая логика — здесь, View только отображает состояние.
+/// ViewModel игрового экрана. Тонкий оркестратор: владеет состоянием и тикером,
+/// а логику конкретного режима делегирует `GameRulesEngine` (см. SurvivalEngine, TimeAttackEngine).
 @MainActor
 final class GameViewModel: ObservableObject {
-
-    // MARK: - Tuning
-
-    private enum Config {
-        /// На сколько уменьшать лимит за каждый порог правильных ответов.
-        static let decrementStep: Double = 0.2
-        /// Порог: каждые N правильных ответов лимит уменьшается на decrementStep.
-        static let answersPerDecrement: Int = 5
-    }
 
     // MARK: - Published state
 
     @Published private(set) var phase: GamePhase = .idle
-    @Published private(set) var currentProblem: Problem?
-    @Published private(set) var streak: Int = 0
-    @Published private(set) var timeRemaining: Double = 0
-    @Published private(set) var timeLimit: Double = 0
+    @Published private(set) var state: GameState?
     /// Значение обратного отсчёта перед стартом (3 → 2 → 1). nil — отсчёт не идёт.
     @Published private(set) var countdownValue: Int?
 
+    // MARK: - Derived (для View)
+
+    var currentProblem: Problem? { state?.problem }
+    var score: Int { state?.score ?? 0 }
+    var timeRemaining: Double { state?.timeRemaining ?? 0 }
+    var timeLimit: Double { state?.timeLimit ?? 0 }
     var timeProgress: Double {
-        guard timeLimit > 0 else { return 0 }
-        return max(0, min(1, timeRemaining / timeLimit))
+        guard let s = state, s.timeLimit > 0 else { return 0 }
+        return max(0, min(1, s.timeRemaining / s.timeLimit))
     }
+
+    /// Активный режим (читает View, например, для подписей).
+    private(set) var mode: GameMode = .survival(.easy)
 
     // MARK: - Dependencies
 
@@ -35,7 +33,8 @@ final class GameViewModel: ObservableObject {
     private let storage: ScoreStorageProtocol
     private let ticker: GameTicking
     private let settings: SettingsStorageProtocol
-    private var difficulty: Difficulty = .easy
+
+    private var engine: GameRulesEngine?
     private var countdownTask: Task<Void, Never>?
 
     init(generator: ProblemGenerating = ProblemGenerator(),
@@ -50,9 +49,10 @@ final class GameViewModel: ObservableObject {
 
     // MARK: - Intents
 
-    func startGame(difficulty: Difficulty) {
-        self.difficulty = difficulty
-        streak = 0
+    func startGame(mode: GameMode) {
+        self.mode = mode
+        self.engine = mode.makeEngine(generator: generator)
+        state = nil
         phase = .idle
         if settings.countdownEnabled {
             runCountdown()
@@ -63,14 +63,14 @@ final class GameViewModel: ObservableObject {
 
     /// Выбор варианта по индексу кнопки (0...3).
     func optionSelected(at index: Int) {
-        guard phase == .playing, let problem = currentProblem else { return }
-
-        if index == problem.correctIndex {
-            streak += 1
-            nextRound()
-        } else {
-            finishGame()
-        }
+        guard phase == .playing,
+              let engine,
+              let current = state else { return }
+        let isCorrect = index == current.problem.correctIndex
+        let outcome = isCorrect
+            ? engine.applyCorrectAnswer(current)
+            : engine.applyWrongAnswer(current)
+        process(outcome)
     }
 
     func stopGame() {
@@ -97,35 +97,33 @@ final class GameViewModel: ObservableObject {
     }
 
     private func beginPlaying() {
+        guard let engine else { return }
+        state = engine.initialState()
         phase = .playing
-        nextRound()
         ticker.start(onTick: { [weak self] in self?.tick() })
     }
 
-    private func nextRound() {
-        currentProblem = generator.nextProblem(difficulty: difficulty)
-        timeLimit = timeLimitForCurrentStreak()
-        timeRemaining = timeLimit
-    }
-
-    private func timeLimitForCurrentStreak() -> Double {
-        let steps = streak / Config.answersPerDecrement
-        let limit = difficulty.startTimeLimit - Double(steps) * Config.decrementStep
-        return max(difficulty.minTimeLimit, limit)
-    }
-
     private func tick() {
-        guard phase == .playing else { return }
-        timeRemaining -= ticker.interval
-        if timeRemaining <= 0 {
-            timeRemaining = 0
-            finishGame()
+        guard phase == .playing,
+              let engine,
+              let current = state else { return }
+        process(engine.applyTick(current, interval: ticker.interval))
+    }
+
+    private func process(_ outcome: StepOutcome) {
+        switch outcome {
+        case .running(let newState):
+            state = newState
+        case .finish(let finalScore):
+            finishGame(score: finalScore)
         }
     }
 
-    private func finishGame() {
+    private func finishGame(score: Int) {
         ticker.stop()
-        let isNewRecord = storage.saveStreakIfRecord(streak, for: difficulty)
-        phase = .gameOver(streak: streak, isNewRecord: isNewRecord, personalBest: storage.bestStreak(for: difficulty))
+        let isNewRecord = storage.saveScoreIfRecord(score, for: mode)
+        phase = .gameOver(score: score,
+                          isNewRecord: isNewRecord,
+                          personalBest: storage.bestScore(for: mode))
     }
 }

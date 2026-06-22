@@ -2,8 +2,8 @@ import Foundation
 
 /// Маршруты навигации приложения.
 enum Route: Hashable {
-    case game(Difficulty)
-    case result(streak: Int, isNewRecord: Bool, personalBest: Int, difficulty: Difficulty)
+    case game(GameMode)
+    case result(score: Int, isNewRecord: Bool, personalBest: Int, mode: GameMode)
     case about
     case settings
 }

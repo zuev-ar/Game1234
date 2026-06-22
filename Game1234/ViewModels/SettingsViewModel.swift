@@ -1,6 +1,6 @@
 import Foundation
 
-/// ViewModel экрана настроек. Тумблеры пишут напрямую в хранилище.
+/// ViewModel экрана настроек. Тумблеры и пикеры пишут напрямую в хранилище.
 @MainActor
 final class SettingsViewModel: ObservableObject {
 
@@ -14,6 +14,16 @@ final class SettingsViewModel: ObservableObject {
         didSet { settings.countdownEnabled = countdownEnabled }
     }
 
+    @Published var modeKind: GameMode.Kind {
+        didSet { settings.modeKind = modeKind }
+    }
+    @Published var difficulty: Difficulty {
+        didSet { settings.difficulty = difficulty }
+    }
+    @Published var timeAttackDuration: TimeAttackDuration {
+        didSet { settings.timeAttackDuration = timeAttackDuration }
+    }
+
     private let settings: SettingsStorageProtocol
 
     init(settings: SettingsStorageProtocol = UserDefaultsSettingsStorage()) {
@@ -21,5 +31,8 @@ final class SettingsViewModel: ObservableObject {
         self.soundEnabled = settings.soundEnabled
         self.hapticsEnabled = settings.hapticsEnabled
         self.countdownEnabled = settings.countdownEnabled
+        self.modeKind = settings.modeKind
+        self.difficulty = settings.difficulty
+        self.timeAttackDuration = settings.timeAttackDuration
     }
 }

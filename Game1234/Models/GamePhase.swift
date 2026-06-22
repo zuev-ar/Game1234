@@ -4,5 +4,5 @@ import Foundation
 enum GamePhase: Equatable {
     case idle
     case playing
-    case gameOver(streak: Int, isNewRecord: Bool, personalBest: Int)
+    case gameOver(score: Int, isNewRecord: Bool, personalBest: Int)
 }

@@ -1,13 +1,13 @@
 import Foundation
 
-/// Хранилище игровых результатов (рекорд по уровню сложности).
+/// Хранилище игровых результатов (рекорд по режиму).
 protocol ScoreStorageProtocol {
-    /// Лучший стрик на уровне.
-    func bestStreak(for difficulty: Difficulty) -> Int
-    /// Сохраняет стрик, если он превышает текущий рекорд уровня.
+    /// Лучший результат для режима.
+    func bestScore(for mode: GameMode) -> Int
+    /// Сохраняет результат, если он превышает текущий рекорд режима.
     /// - Returns: true, если установлен новый рекорд.
     @discardableResult
-    func saveStreakIfRecord(_ streak: Int, for difficulty: Difficulty) -> Bool
+    func saveScoreIfRecord(_ score: Int, for mode: GameMode) -> Bool
 }
 
 final class UserDefaultsScoreStorage: ScoreStorageProtocol {
@@ -18,18 +18,24 @@ final class UserDefaultsScoreStorage: ScoreStorageProtocol {
         self.defaults = defaults
     }
 
-    private func key(for difficulty: Difficulty) -> String {
-        "game1234.bestStreak.\(difficulty.rawValue)"
+    private func key(for mode: GameMode) -> String {
+        switch mode {
+        case .survival(let d):
+            // Сохраняем совместимость со старыми рекордами Survival.
+            return "game1234.bestStreak.\(d.rawValue)"
+        case .timeAttack:
+            return "game1234.bestScore.\(mode.storageID)"
+        }
     }
 
-    func bestStreak(for difficulty: Difficulty) -> Int {
-        defaults.integer(forKey: key(for: difficulty))
+    func bestScore(for mode: GameMode) -> Int {
+        defaults.integer(forKey: key(for: mode))
     }
 
     @discardableResult
-    func saveStreakIfRecord(_ streak: Int, for difficulty: Difficulty) -> Bool {
-        guard streak > bestStreak(for: difficulty) else { return false }
-        defaults.set(streak, forKey: key(for: difficulty))
+    func saveScoreIfRecord(_ score: Int, for mode: GameMode) -> Bool {
+        guard score > bestScore(for: mode) else { return false }
+        defaults.set(score, forKey: key(for: mode))
         return true
     }
 }

@@ -2,10 +2,10 @@ import SwiftUI
 
 struct ResultView: View {
     @Binding var path: [Route]
-    let streak: Int
+    let score: Int
     let isNewRecord: Bool
     let personalBest: Int
-    let difficulty: Difficulty
+    let mode: GameMode
 
     private let feedback: FeedbackProviding = FeedbackCoordinator()
 
@@ -27,13 +27,13 @@ struct ResultView: View {
                         .padding(.top, 20)
                 }
 
-                Text("FINAL STREAK")
+                Text(mode.resultCaption)
                     .font(.system(size: 14, weight: .bold))
                     .tracking(2)
                     .foregroundStyle(Theme.textSecondary)
                     .padding(.top, 22)
 
-                Text("\(streak)")
+                Text("\(score)")
                     .font(Theme.display(100, weight: .bold))
                     .foregroundStyle(Theme.numerals)
 
@@ -65,7 +65,7 @@ struct ResultView: View {
     private var actionButtons: some View {
         VStack(spacing: 12) {
             Button {
-                path = [.game(difficulty)]
+                path = [.game(mode)]
             } label: {
                 Text("Play Again")
                     .font(Theme.display(23, weight: .bold))
@@ -98,14 +98,14 @@ struct ResultView: View {
     }
 }
 
-#Preview("Рекорд") {
+#Preview("Survival · Record") {
     NavigationStack {
-        ResultView(path: .constant([]), streak: 14, isNewRecord: true, personalBest: 14, difficulty: .easy)
+        ResultView(path: .constant([]), score: 14, isNewRecord: true, personalBest: 14, mode: .survival(.easy))
     }
 }
 
-#Preview("Обычный") {
+#Preview("Time Attack") {
     NavigationStack {
-        ResultView(path: .constant([]), streak: 5, isNewRecord: false, personalBest: 14, difficulty: .easy)
+        ResultView(path: .constant([]), score: 22, isNewRecord: false, personalBest: 30, mode: .timeAttack(.easy, duration: .sixty))
     }
 }

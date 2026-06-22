@@ -1,22 +1,33 @@
 import Foundation
 
-/// ViewModel главного меню. Хранит выбранный уровень и его рекорд.
+/// ViewModel главного меню. Читает выбранный режим из настроек и рекорд для него.
 @MainActor
 final class MainMenuViewModel: ObservableObject {
 
-    @Published var difficulty: Difficulty = .easy {
-        didSet { refresh() }
-    }
-    @Published private(set) var bestStreak: Int = 0
+    @Published private(set) var selectedMode: GameMode = .survival(.easy)
+    @Published private(set) var bestScore: Int = 0
 
     private let storage: ScoreStorageProtocol
+    private let settings: SettingsStorageProtocol
 
-    init(storage: ScoreStorageProtocol = UserDefaultsScoreStorage()) {
+    init(storage: ScoreStorageProtocol = UserDefaultsScoreStorage(),
+         settings: SettingsStorageProtocol = UserDefaultsSettingsStorage()) {
         self.storage = storage
+        self.settings = settings
     }
 
-    /// Перечитывает рекорд выбранного уровня (например, при появлении экрана).
+    /// Перечитывает выбор режима и рекорд (вызывать при появлении экрана).
     func refresh() {
-        bestStreak = storage.bestStreak(for: difficulty)
+        selectedMode = buildSelectedMode()
+        bestScore = storage.bestScore(for: selectedMode)
+    }
+
+    private func buildSelectedMode() -> GameMode {
+        switch settings.modeKind {
+        case .survival:
+            return .survival(settings.difficulty)
+        case .timeAttack:
+            return .timeAttack(settings.difficulty, duration: settings.timeAttackDuration)
+        }
     }
 }
