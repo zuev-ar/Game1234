@@ -8,7 +8,7 @@ protocol ProblemGenerating {
 final class ProblemGenerator: ProblemGenerating {
 
     /// Максимально допустимый результат и значение варианта.
-    private static let maxResult = 100
+    private static let maxResult = 99
 
     private var lastText: String?
 
@@ -45,12 +45,12 @@ final class ProblemGenerator: ProblemGenerating {
     private func operands(for operation: Operation) -> (left: Int, right: Int, answer: Int) {
         switch operation {
         case .addition:
-            let a = Int.random(in: 1...50)
-            let b = Int.random(in: 1...min(50, Self.maxResult - a))
+            let a = Int.random(in: 1...25)
+            let b = Int.random(in: 1...min(25, 50 - a))
             return (a, b, a + b)
 
         case .subtraction:
-            let a = Int.random(in: 2...Self.maxResult)
+            let a = Int.random(in: 2...50)
             let b = Int.random(in: 1...(a - 1))
             return (a, b, a - b)
 

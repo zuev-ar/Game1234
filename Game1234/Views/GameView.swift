@@ -149,9 +149,12 @@ struct GameView: View {
     }
 
     private var scoreChip: some View {
-        HStack(alignment: .bottom, spacing: 8) {
+        HStack(alignment: .center, spacing: 6) {
             Text(scoreLabel)
                 .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(Theme.textSecondary)
+            Text("·")
+                .font(Theme.display(20, weight: .bold))
                 .foregroundStyle(Theme.textSecondary)
             Text("\(viewModel.score)")
                 .font(Theme.display(20, weight: .bold))
