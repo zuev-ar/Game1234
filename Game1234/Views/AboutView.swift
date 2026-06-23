@@ -19,7 +19,7 @@ struct AboutView: View {
                         .padding(.top, 4)
                 }
                 .padding(.horizontal, 28)
-                .padding(.top, 24)
+                .padding(.top, 10)
                 .padding(.bottom, 40)
             }
         }
@@ -30,7 +30,7 @@ struct AboutView: View {
     // MARK: - Sections
 
     private var header: some View {
-        VStack(spacing: 14) {
+        VStack(spacing: 10) {
             LogoView(fontSize: 66)
             Text("Version \(AppInfo.version) (\(AppInfo.build))")
                 .font(.system(size: 14, weight: .semibold))
@@ -68,9 +68,9 @@ struct AboutView: View {
             linkButton(title: "Contact", systemImage: "envelope.fill") {
                 openURL(URL(string: "mailto:\(AppInfo.contactEmail)")!)
             }
-//            linkButton(title: "Privacy Policy", systemImage: "lock.shield.fill") {
-//                if let url = URL(string: AppInfo.privacyURL) { openURL(url) }
-//            }
+            linkButton(title: "Privacy Policy", systemImage: "lock.shield.fill") {
+                if let url = URL(string: AppInfo.privacyURL) { openURL(url) }
+            }
         }
     }
 
