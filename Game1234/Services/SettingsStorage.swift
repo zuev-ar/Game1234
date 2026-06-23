@@ -12,6 +12,8 @@ protocol SettingsStorageProtocol: AnyObject {
     var difficulty: Difficulty { get set }
     /// Выбранная длительность Time Attack.
     var timeAttackDuration: TimeAttackDuration { get set }
+    /// Выбранная тема оформления.
+    var appTheme: AppTheme { get set }
 }
 
 final class UserDefaultsSettingsStorage: SettingsStorageProtocol {
@@ -23,6 +25,7 @@ final class UserDefaultsSettingsStorage: SettingsStorageProtocol {
         static let modeKind = "game1234.settings.modeKind"
         static let difficulty = "game1234.settings.difficulty"
         static let duration = "game1234.settings.timeAttackDuration"
+        static let theme = AppTheme.storageKey
     }
 
     private let defaults: UserDefaults
@@ -77,5 +80,14 @@ final class UserDefaultsSettingsStorage: SettingsStorageProtocol {
     var timeAttackDuration: TimeAttackDuration {
         get { TimeAttackDuration(rawValue: defaults.integer(forKey: Keys.duration)) ?? .sixty }
         set { defaults.set(newValue.rawValue, forKey: Keys.duration) }
+    }
+
+    var appTheme: AppTheme {
+        get {
+            guard let raw = defaults.string(forKey: Keys.theme),
+                  let t = AppTheme(rawValue: raw) else { return .system }
+            return t
+        }
+        set { defaults.set(newValue.rawValue, forKey: Keys.theme) }
     }
 }

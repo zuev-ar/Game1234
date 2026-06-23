@@ -2,10 +2,17 @@ import SwiftUI
 
 @main
 struct Game1234App: App {
+    @AppStorage(AppTheme.storageKey) private var themeRaw: String = AppTheme.system.rawValue
+
+    private var appTheme: AppTheme {
+        AppTheme(rawValue: themeRaw) ?? .system
+    }
+
     var body: some Scene {
         WindowGroup {
             RootView()
                 .tint(Theme.accent)
+                .preferredColorScheme(appTheme.colorScheme)
         }
     }
 }

@@ -23,6 +23,9 @@ final class SettingsViewModel: ObservableObject {
     @Published var timeAttackDuration: TimeAttackDuration {
         didSet { settings.timeAttackDuration = timeAttackDuration }
     }
+    @Published var appTheme: AppTheme {
+        didSet { settings.appTheme = appTheme }
+    }
 
     private let settings: SettingsStorageProtocol
 
@@ -34,5 +37,6 @@ final class SettingsViewModel: ObservableObject {
         self.modeKind = settings.modeKind
         self.difficulty = settings.difficulty
         self.timeAttackDuration = settings.timeAttackDuration
+        self.appTheme = settings.appTheme
     }
 }

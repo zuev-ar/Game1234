@@ -14,6 +14,7 @@ struct SettingsView: View {
                     modeSection
                     durationSection
                     difficultySection
+                    themeSection
                 }
                 .padding(.horizontal, 24)
                 .padding(.top, 16)
@@ -42,6 +43,12 @@ struct SettingsView: View {
             toggleRow(title: "Countdown before start",
                       systemImage: "timer",
                       isOn: $viewModel.countdownEnabled)
+        }
+    }
+
+    private var themeSection: some View {
+        section("APPEARANCE") {
+            ThemePicker(selection: $viewModel.appTheme)
         }
     }
 

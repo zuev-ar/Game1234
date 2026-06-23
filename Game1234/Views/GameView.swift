@@ -41,7 +41,7 @@ struct GameView: View {
         }
         .simultaneousGesture(exitGesture)
         .animation(.spring(response: 0.32, dampingFraction: 0.78), value: showExitConfirmation)
-        .animation(.easeOut(duration: 0.35), value: viewModel.countdownValue)
+        .animation(.easeOut(duration: 0.15), value: viewModel.countdownValue)
         .navigationBarBackButtonHidden(true)
         .onAppear { viewModel.startGame(mode: mode) }
         .onDisappear { viewModel.stopGame() }

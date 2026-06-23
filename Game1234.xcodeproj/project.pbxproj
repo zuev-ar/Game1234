@@ -32,6 +32,8 @@
 		B47E52CE2FE993AB00CD375A /* DurationPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47E52CD2FE993A900CD375A /* DurationPicker.swift */; };
 		B47E52D02FE993D300CD375A /* DifficultyPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47E52CF2FE993D200CD375A /* DifficultyPicker.swift */; };
 		B47E52D22FE9B94E00CD375A /* PracticeEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47E52D12FE9B94700CD375A /* PracticeEngine.swift */; };
+		B47E52D42FEB001A00CD375A /* ThemePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47E52D32FEB001900CD375A /* ThemePicker.swift */; };
+		B47E52D82FEB01B800CD375A /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47E52D72FEB01B600CD375A /* AppTheme.swift */; };
 		B494C1672FDC8E9C00CAA0A9 /* Game1234App.swift in Sources */ = {isa = PBXBuildFile; fileRef = B494C1662FDC8E9C00CAA0A9 /* Game1234App.swift */; };
 		B494C16B2FDC8EA000CAA0A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B494C16A2FDC8EA000CAA0A9 /* Assets.xcassets */; };
 		B494C16E2FDC8EA000CAA0A9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B494C16D2FDC8EA000CAA0A9 /* Preview Assets.xcassets */; };
@@ -79,6 +81,8 @@
 		B47E52CD2FE993A900CD375A /* DurationPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationPicker.swift; sourceTree = "<group>"; };
 		B47E52CF2FE993D200CD375A /* DifficultyPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DifficultyPicker.swift; sourceTree = "<group>"; };
 		B47E52D12FE9B94700CD375A /* PracticeEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeEngine.swift; sourceTree = "<group>"; };
+		B47E52D32FEB001900CD375A /* ThemePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePicker.swift; sourceTree = "<group>"; };
+		B47E52D72FEB01B600CD375A /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		B494C1632FDC8E9C00CAA0A9 /* Game1234.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Game1234.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B494C1662FDC8E9C00CAA0A9 /* Game1234App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game1234App.swift; sourceTree = "<group>"; };
 		B494C16A2FDC8EA000CAA0A9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -143,6 +147,7 @@
 		B41D37EA2FDDB83700FF0F2E /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				B47E52D72FEB01B600CD375A /* AppTheme.swift */,
 				B41D37EF2FDDB88000FF0F2E /* Problem.swift */,
 				B4B06EC22FE3052700FE9D5C /* Operation.swift */,
 				B4B06EC42FE305A700FE9D5C /* Difficulty.swift */,
@@ -163,6 +168,7 @@
 				B4CEAAEF2FDDCCF2005B57F4 /* AnswerButton.swift */,
 				B43E53E22FDEDED200A2D846 /* AboutView.swift */,
 				B4CEAAF12FDDCD02005B57F4 /* TimerBar.swift */,
+				B47E52D32FEB001900CD375A /* ThemePicker.swift */,
 				B43E53DE2FDEC7E700A2D846 /* TrophyIcon.swift */,
 				B4CEAAE92FDDBB3E005B57F4 /* ResultView.swift */,
 				B4CEAAF52FDDD0D0005B57F4 /* ConfettiView.swift */,
@@ -309,7 +315,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				B41D37E32FDDB5BB00FF0F2E /* Route.swift in Sources */,
+				B47E52D42FEB001A00CD375A /* ThemePicker.swift in Sources */,
 				B43E53E32FDEDED400A2D846 /* AboutView.swift in Sources */,
+				B47E52D82FEB01B800CD375A /* AppTheme.swift in Sources */,
 				B43E53E12FDEDE5200A2D846 /* AppInfo.swift in Sources */,
 				B4CEAAF22FDDCD03005B57F4 /* TimerBar.swift in Sources */,
 				B4B06EC52FE305A900FE9D5C /* Difficulty.swift in Sources */,
