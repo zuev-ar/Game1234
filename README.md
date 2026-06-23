@@ -1,23 +1,28 @@
 # 1·2·3·4
 
-A fast-paced mental math game for iOS. Pick the correct answer out of four options as fast as you can — race the timer, build your streak, and beat your personal best.
+A fast-paced mental math game for iOS. Pick the correct answer out of four — fast. Three modes, three difficulty tiers, and a stats dashboard to track your progress.
 
 ---
 
 ## Gameplay
 
-Each round shows a simple expression like `8 ÷ 2` or `2 + 27`. Four buttons offer four possible answers — tap the right one before the timer runs out. Every correct answer extends your streak; one mistake — or one timeout — ends the run. The timer shrinks as your streak grows, so the longer you survive, the faster you have to think.
+Each round shows a simple expression like `8 ÷ 2` or `2 + 27`. Four buttons offer four possible answers — tap the right one before the timer runs out (when there is one).
 
+- **Three game modes**
+  - **Practice** — relaxed warm-up, no timer, no losing. Great for kids or a calm start.
+  - **Time Attack** — fixed 60 or 90 seconds; score as many correct answers as you can. Mistakes don't end the run.
+  - **Survival** — one wrong tap or timeout ends the game, and the per-answer timer shrinks as your streak grows.
+- **Three difficulty tiers** — Easy (add & subtract), Medium (+ division), Hard (+ multiplication). Harder levels give a little more time per answer.
 - **Four options, one right** — read the problem, not the button positions; the answers are shuffled every round.
-- **Difficulty levels** — Easy (add & subtract), Medium (+ division), Hard (+ multiplication). Harder levels give a little more time per answer.
-- **Streak-based scoring** — chase consecutive correct answers.
-- **Personal best per level** — your record is saved locally for each difficulty.
-- **Escalating pressure** — the per-answer time limit decreases as your streak climbs.
+- **Personal best per mode and level** — records are saved locally for each mode/difficulty/duration combination.
+- **Statistics dashboard** — total games, best score, best of the week, average, accuracy, total play time, weekly chart and full history.
+- **Themes** — System, Light or Dark.
 - **Sound & haptics** — audio and tactile feedback on answers, with a confetti celebration on a new record. Both can be toggled in Settings.
 
 ## Tech stack
 
-- **SwiftUI** (iOS 16+)
+- **SwiftUI** (iOS 17+), **Swift 6**
+- **Swift Charts** for the weekly stats chart
 - **MVVM** architecture with protocol-based dependency injection
 
 ## Design notes
@@ -31,5 +36,5 @@ A few decisions worth calling out:
 
 ## Requirements
 
-- Xcode 15+
-- iOS 16.0+
+- Xcode 16+
+- iOS 17.0+
