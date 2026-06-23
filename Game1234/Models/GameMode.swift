@@ -83,7 +83,7 @@ enum GameMode: Hashable {
         }
     }
 
-    enum Kind: String, CaseIterable, Hashable, Identifiable {
+    enum Kind: String, CaseIterable, Hashable, Identifiable, Codable {
         case practice
         case survival
         case timeAttack

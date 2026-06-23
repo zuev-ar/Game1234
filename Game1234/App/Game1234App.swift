@@ -32,6 +32,8 @@ struct RootView: View {
                         ResultView(path: $path, score: score, isNewRecord: isNewRecord, personalBest: personalBest, mode: mode)
                     case .about:
                         AboutView()
+                    case .stats:
+                        StatsView()
                     case .settings:
                         SettingsView(path: $path)
                     }

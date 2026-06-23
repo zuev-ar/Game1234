@@ -15,6 +15,7 @@ struct MainMenuView: View {
                 if viewModel.selectedMode.hasAutoFinish {
                     recordPill
                         .offset(y: -40)
+                        .onTapGesture { path.append(.stats) }
                 }
                 summaryText
                     .padding(.top, 2)

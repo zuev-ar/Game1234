@@ -30,20 +30,28 @@ final class GameViewModel: ObservableObject {
 
     // MARK: - Dependencies
 
+    private let ticker: GameTicking
     private let generator: ProblemGenerating
     private let storage: ScoreStorageProtocol
-    private let ticker: GameTicking
+    private let stats: StatsStorageProtocol
     private let settings: SettingsStorageProtocol
 
     private var engine: GameRulesEngine?
     private var countdownTask: Task<Void, Never>?
 
+    // Метрики текущей партии.
+    private var correctCount: Int = 0
+    private var wrongCount: Int = 0
+    private var startedAt: Date?
+
     init(generator: ProblemGenerating = ProblemGenerator(),
          storage: ScoreStorageProtocol = UserDefaultsScoreStorage(),
+         stats: StatsStorageProtocol = UserDefaultsStatsStorage(),
          ticker: GameTicking = GameTicker(),
          settings: SettingsStorageProtocol = UserDefaultsSettingsStorage()) {
         self.generator = generator
         self.storage = storage
+        self.stats = stats
         self.ticker = ticker
         self.settings = settings
     }
@@ -55,6 +63,9 @@ final class GameViewModel: ObservableObject {
         self.engine = mode.makeEngine(generator: generator)
         state = nil
         phase = .idle
+        correctCount = 0
+        wrongCount = 0
+        startedAt = nil
         if settings.countdownEnabled {
             runCountdown()
         } else {
@@ -68,6 +79,7 @@ final class GameViewModel: ObservableObject {
               let engine,
               let current = state else { return }
         let isCorrect = index == current.problem.correctIndex
+        if isCorrect { correctCount += 1 } else { wrongCount += 1 }
         let outcome = isCorrect
             ? engine.applyCorrectAnswer(current)
             : engine.applyWrongAnswer(current)
@@ -116,6 +128,7 @@ final class GameViewModel: ObservableObject {
         guard let engine else { return }
         state = engine.initialState()
         phase = .playing
+        startedAt = Date()
         if mode.usesTimer {
             ticker.start(onTick: { [weak self] in self?.tick() })
         }
@@ -140,6 +153,13 @@ final class GameViewModel: ObservableObject {
     private func finishGame(score: Int) {
         ticker.stop()
         let isNewRecord = storage.saveScoreIfRecord(score, for: mode)
+        let duration = startedAt.map { Date().timeIntervalSince($0) } ?? 0
+        let record = GameRecord(mode: mode,
+                                score: score,
+                                correctAnswers: correctCount,
+                                wrongAnswers: wrongCount,
+                                duration: max(0, duration))
+        stats.append(record)
         phase = .gameOver(score: score,
                           isNewRecord: isNewRecord,
                           personalBest: storage.bestScore(for: mode))

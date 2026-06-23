@@ -1,7 +1,7 @@
 import Foundation
 
 /// Уровень сложности: набор операций и масштаб операндов.
-enum Difficulty: String, CaseIterable, Identifiable {
+enum Difficulty: String, CaseIterable, Identifiable, Codable {
     case easy
     case medium
     case hard
