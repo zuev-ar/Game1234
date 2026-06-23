@@ -40,7 +40,7 @@ struct SettingsView: View {
             toggleRow(title: "Haptics",
                       systemImage: "iphone.radiowaves.left.and.right",
                       isOn: $viewModel.hapticsEnabled)
-            toggleRow(title: "Countdown before start",
+            toggleRow(title: "Countdown",
                       systemImage: "timer",
                       isOn: $viewModel.countdownEnabled)
         }
@@ -81,7 +81,7 @@ struct SettingsView: View {
                                         @ViewBuilder content: () -> Content) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             Text(title)
-                .font(.system(size: 12, weight: .bold))
+                .font(Theme.display(12, weight: .bold))
                 .tracking(1.6)
                 .foregroundStyle(Theme.textSecondary)
                 .padding(.leading, 4)
@@ -94,7 +94,7 @@ struct SettingsView: View {
             path.append(.about)
         } label: {
             Text("About")
-                .font(.system(size: 16, weight: .semibold))
+                .font(Theme.display(16, weight: .semibold))
                 .foregroundStyle(Theme.textSecondary)
                 .underline()
         }
@@ -108,8 +108,8 @@ struct SettingsView: View {
                 .foregroundStyle(Theme.accent)
                 .frame(width: 28)
             Text(title)
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundStyle(Theme.textPrimary)
+                .font(Theme.display(20, weight: .semibold))
+                .foregroundStyle(Theme.textSecondary)
             Spacer()
             Toggle("", isOn: isOn)
                 .labelsHidden()
