@@ -180,7 +180,7 @@ struct GameView: View {
     }
 
     private var exitSubtitle: String {
-        mode.usesTimer ? "Your current score won't be saved." : "Take a break — your progress isn't tracked here."
+        mode.usesTimer ? "Your current score won't be saved." : "Your result will be saved to stats."
     }
 
     private var exitConfirmTitle: String {
@@ -234,6 +234,9 @@ struct GameView: View {
     }
 
     private func exitToMenu() {
+        if case .practice = mode {
+            viewModel.savePracticeResult()
+        }
         viewModel.stopGame()
         path.removeAll()
     }

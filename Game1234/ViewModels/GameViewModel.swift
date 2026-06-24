@@ -30,10 +30,10 @@ final class GameViewModel: ObservableObject {
 
     // MARK: - Dependencies
 
-    private let ticker: GameTicking
     private let generator: ProblemGenerating
     private let storage: ScoreStorageProtocol
     private let stats: StatsStorageProtocol
+    private let ticker: GameTicking
     private let settings: SettingsStorageProtocol
 
     private var engine: GameRulesEngine?
@@ -106,6 +106,19 @@ final class GameViewModel: ObservableObject {
         countdownValue = nil
         isPaused = false
         ticker.stop()
+    }
+
+    /// Сохранить результат Practice в статистику без обновления рекорда.
+    /// Вызывается при ручном выходе из режима; фаза не меняется (ResultView не показываем).
+    func savePracticeResult() {
+        guard phase == .playing, case .practice = mode else { return }
+        let duration = startedAt.map { Date().timeIntervalSince($0) } ?? 0
+        let record = GameRecord(mode: mode,
+                                score: state?.score ?? 0,
+                                correctAnswers: correctCount,
+                                wrongAnswers: wrongCount,
+                                duration: max(0, duration))
+        stats.append(record)
     }
 
     // MARK: - Private
