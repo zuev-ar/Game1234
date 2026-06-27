@@ -9,7 +9,7 @@ struct StatsView: View {
         ZStack {
             Theme.background.ignoresSafeArea()
 
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 VStack(spacing: 20) {
                     filterPicker
                     metricsGrid
